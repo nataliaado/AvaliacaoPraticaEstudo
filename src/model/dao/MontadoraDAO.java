@@ -15,7 +15,7 @@ public class MontadoraDAO {
 	 * @param m a nova montadora
 	 * @return 1 caso tenha sucesso, 0 caso contrário.
 	 */
-	public int inserir(Montadora m) {
+	public Montadora inserir(Montadora m) {
 		int idInserido = -1;
 		String sql = "INSERT INTO MONTADORA(NOME, PAIS, CNPJ) VALUES (?, ?, ?)";
 		try {
@@ -31,12 +31,13 @@ public class MontadoraDAO {
 			if (rs.next()) {
 				idInserido = rs.getInt(1);
 			}
+			m.setId(idInserido);
 			ps.close();
 		} catch (SQLException e) {
 			System.out.println("Erro ao cadastrar montadora. Erro: " + e.getMessage());
 		}
 
-		return idInserido;
+		return m;
 	}
 
 	/**

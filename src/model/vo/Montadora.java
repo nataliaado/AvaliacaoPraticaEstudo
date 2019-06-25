@@ -49,7 +49,7 @@ public class Montadora {
 
 	@Override
 	public String toString() {
-		//TODO reescrever conforme especificado no item 2.b da avaliação
-		return "Montadora [id=" + id + ", nome=" + nome + ", pais=" + pais + ", cnpj=" + cnpj + "]";
+		//reescrever conforme especificado no item 2.b da avaliação
+		return this.nome + " (" +  this.pais + ") - " + this.cnpj;
 	}
 }

@@ -118,7 +118,6 @@ public class CarroDAO {
 
 	public ArrayList<Carro> listarTodos() {
 		ArrayList<Carro> carros = new ArrayList<Carro>();
-
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -142,18 +141,80 @@ public class CarroDAO {
 	}
 
 	public ArrayList<Carro> listarPorPlaca(String placaCarro) {
-		//TODO implementar (parte do item 1.c.2)
-		return null; 
+		//parte do item 1.c.2
+		ArrayList<Carro> carros = new ArrayList<Carro>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+
+		String query = "SELECT * FROM CARRO c WHERE c.placa = '" + placaCarro + "'";
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				Carro c = criarCarroResultSet(resultado);
+				carros.add(c);
+			}
+		} catch (SQLException e){
+			System.out.println("Erro ao consultar todos os carros. Causa: " + e.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+
+		return carros;
 	}
 
 	public ArrayList<Carro> listarPorMontadora(Montadora montadoraSelecionada) {
-		//TODO implementar (parte do item 1.c.2)
-		return null;
+		//parte do item 1.c.2
+		ArrayList<Carro> carros = new ArrayList<Carro>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+
+		String query = "SELECT * FROM CARRO c WHERE c.idmontadora = " + montadoraSelecionada.getId();
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				Carro c = criarCarroResultSet(resultado);
+				carros.add(c);
+			}
+		} catch (SQLException e){
+			System.out.println("Erro ao consultar todos os carros. Causa: " + e.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+
+		return carros;
 	}
 
 	public ArrayList<Carro> listarPorPlacaEMontadora(String placaCarro, Montadora montadoraSelecionada) {
-		//TODO implementar (item 1.c.3)
-		return null;
+		//item 1.c.3
+		ArrayList<Carro> carros = new ArrayList<Carro>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+
+		String query = "SELECT * FROM CARRO c "
+				+ " WHERE c.idmontadora = " + montadoraSelecionada.getId() 
+				+ " AND c.placa = '" + placaCarro + "'";
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				Carro c = criarCarroResultSet(resultado);
+				carros.add(c);
+			}
+		} catch (SQLException e){
+			System.out.println("Erro ao consultar todos os carros. Causa: " + e.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+
+		return carros;
 	}
 
 	/**
@@ -163,7 +224,6 @@ public class CarroDAO {
 	 */
 	private Carro criarCarroResultSet(ResultSet resultadoConsulta) {
 		Carro c = null;
-
 		try {
 			c = new Carro();
 			c.setId(resultadoConsulta.getInt("id"));
@@ -174,6 +234,7 @@ public class CarroDAO {
 			MontadoraDAO montadoraDAO = new MontadoraDAO();
 			Montadora m = montadoraDAO.consultarPorId(idMontadora);
 
+			c.setPlaca(resultadoConsulta.getString("placa"));
 			c.setMontadora(m);
 			c.setAno(resultadoConsulta.getInt("ano"));
 			c.setModelo(resultadoConsulta.getString("modelo"));

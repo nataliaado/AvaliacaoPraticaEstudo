@@ -21,8 +21,15 @@ public class MontadoraController {
 	 *  	 - Caso contrário: uma mensagem devolvida pelo BO 
 	 */
 	public String excluirMontadora(Montadora montadoraSelecionada) {
-		//TODO implementar (itens 2.c e 2.d da avaliação)
+		//implementar (itens 2.c e 2.d da avaliação)
 		String mensagem = "";
+		
+		if(montadoraSelecionada == null) {
+			mensagem = "Selecione uma montadora";
+		}else {
+			MontadoraBO bo = new MontadoraBO();
+			mensagem = bo.excluirMontadora(montadoraSelecionada);
+		}
 		
 		return mensagem;
 	}

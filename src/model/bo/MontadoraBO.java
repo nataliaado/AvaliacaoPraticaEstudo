@@ -2,7 +2,9 @@ package model.bo;
 
 import java.util.ArrayList;
 
+import model.dao.CarroDAO;
 import model.dao.MontadoraDAO;
+import model.vo.Carro;
 import model.vo.Montadora;
 
 public class MontadoraBO {
@@ -25,8 +27,22 @@ public class MontadoraBO {
 	public String excluirMontadora(Montadora montadoraSelecionada) {
 		String mensagem = "";
 
-		// TODO implementar as regras do item 1.c (c.1, c.2 e c.3) da avaliação
-
+		CarroDAO cDAO = new CarroDAO();
+		// implementar as regras do item 1.c (c.1, c.2 e c.3) da avaliação
+		ArrayList<Carro> carrosDaMontadoraSelecionada = cDAO.listarPorMontadora(montadoraSelecionada);
+		
+		if(carrosDaMontadoraSelecionada.isEmpty()) {
+			MontadoraDAO mDAO = new MontadoraDAO();
+			boolean excluiu = mDAO.excluir(montadoraSelecionada.getId());
+			
+			if(excluiu) {
+				mensagem = "Excluída com sucesso";
+			}else {
+				mensagem = "Erro ao excluir montadora";
+			}
+		}else {
+			mensagem = "Montadora não pode ser excluída, pois possui carros";
+		}
 		return mensagem;
 	}
 }
